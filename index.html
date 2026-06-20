@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0d1117">
+<meta name="description" content="Professional E-Bike Charger Repair Guide">
+<title>EV Charger Repair Pro</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="72x72" href="icons/icon-72.png">
+<link rel="icon" type="image/png" sizes="96x96" href="icons/icon-96.png">
+<link rel="icon" type="image/png" sizes="128x128" href="icons/icon-128.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--txt:#e6edf3;--txt2:#8b949e;--ac:#58a6ff;--ac2:#79c0ff;--dn:#f85149;--wn:#d29922;--ok:#3fb950;--bd:#30363d;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;min-height:100vh}
+.header{background:var(--bg2);border-bottom:1px solid var(--bd);padding:1rem 1.5rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:.75rem}
+.logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--ac),#a371f7);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.logo-text h1{font-size:1.1rem;font-weight:600}
+.logo-text p{font-size:.75rem;color:var(--txt2)}
+.install-btn{background:var(--ac);color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;cursor:pointer;font-weight:500;display:none}
+.install-btn:hover{background:var(--ac2)}
+.container{display:flex;max-width:1400px;margin:0 auto}
+.sidebar{width:280px;background:var(--bg2);border-right:1px solid var(--bd);height:calc(100vh - 65px);overflow-y:auto;position:sticky;top:65px}
+.nav-section{padding:.5rem 0}
+.nav-title{padding:.75rem 1.25rem;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--txt2);font-weight:600}
+.nav-item{display:block;padding:.6rem 1.25rem .6rem 1.5rem;color:var(--txt2);text-decoration:none;font-size:.85rem;border-left:3px solid transparent;cursor:pointer;transition:all .2s}
+.nav-item:hover{background:var(--bg3);color:var(--txt)}
+.nav-item.active{background:rgba(88,166,255,.1);color:var(--ac);border-left-color:var(--ac)}
+.nav-item .icon{margin-right:.5rem}
+.main{flex:1;padding:2rem;max-width:900px}
+.content-section{display:none;animation:fadeIn .3s ease}
+.content-section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+h2{font-size:1.75rem;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--bd)}
+h3{font-size:1.25rem;margin:1.5rem 0 .75rem;color:var(--ac)}
+h4{font-size:1rem;margin:1.25rem 0 .5rem;color:var(--txt)}
+p{margin-bottom:1rem;color:var(--txt2)}
+.highlight-box{background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.3);border-radius:8px;padding:1rem 1.25rem;margin:1rem 0}
+.warning-box{background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.3);border-radius:8px;padding:1rem 1.25rem;margin:1rem 0}
+.warning-box .title{color:var(--dn);font-weight:600;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.success-box{background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.3);border-radius:8px;padding:1rem 1.25rem;margin:1rem 0}
+.block-diagram{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:1.5rem;margin:1.5rem 0;text-align:center}
+.block{display:inline-block;background:var(--bg3);border:1px solid var(--bd);border-radius:8px;padding:.75rem 1.25rem;margin:.25rem;font-size:.85rem;min-width:140px}
+.block.ac{border-color:var(--wn);background:rgba(210,153,34,.1)}
+.block.dc{border-color:var(--dn);background:rgba(248,81,73,.1)}
+.block.control{border-color:var(--ac);background:rgba(88,166,255,.1)}
+.block.output{border-color:var(--ok);background:rgba(63,185,80,.1)}
+.arrow{display:inline-block;color:var(--txt2);font-size:1.2rem;margin:0 .25rem;vertical-align:middle}
+.arrow-down{display:block;text-align:center;color:var(--txt2);font-size:1.2rem;margin:.25rem 0}
+table{width:100%;border-collapse:collapse;margin:1rem 0;background:var(--bg2);border-radius:8px;overflow:hidden}
+th,td{padding:.75rem 1rem;text-align:left;border-bottom:1px solid var(--bd)}
+th{background:var(--bg3);font-weight:600;font-size:.85rem;text-transform:uppercase;letter-spacing:.03em;color:var(--txt2)}
+td{font-size:.9rem}
+tr:hover td{background:rgba(88,166,255,.05)}
+.flowchart{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.flow-step{background:var(--bg3);border:1px solid var(--bd);border-radius:8px;padding:.75rem 1rem;margin:.5rem auto;max-width:300px;text-align:center;position:relative}
+.flow-step::after{content:"▼";display:block;color:var(--txt2);margin-top:.5rem}
+.flow-step:last-child::after{content:none}
+.flow-step.decision{border-color:var(--wn);background:rgba(210,153,34,.1)}
+.flow-step.action{border-color:var(--ac);background:rgba(88,166,255,.1)}
+.flow-step.end{border-color:var(--ok);background:rgba(63,185,80,.1)}
+.flow-branch{display:flex;justify-content:center;gap:2rem;margin:.5rem 0}
+.flow-label{font-size:.75rem;color:var(--txt2);text-align:center;margin:.25rem 0}
+code{background:var(--bg2);padding:.2rem .4rem;border-radius:4px;font-family:'SF Mono',Monaco,monospace;font-size:.85em;color:var(--ac)}
+.value{color:var(--ok);font-weight:600}
+.fault{color:var(--dn)}
+ul,ol{margin:.75rem 0 .75rem 1.5rem;color:var(--txt2)}
+li{margin-bottom:.4rem}
+.schematic{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:1.5rem;margin:1.5rem 0;font-family:'SF Mono',monospace;font-size:.8rem;line-height:1.8;overflow-x:auto;white-space:pre;color:var(--txt2)}
+.pinout{display:grid;grid-template-columns:60px 1fr 1fr;gap:.5rem;margin:1rem 0}
+.pinout-header{font-weight:600;color:var(--txt2);font-size:.8rem;text-transform:uppercase;padding-bottom:.5rem;border-bottom:1px solid var(--bd)}
+.pinout-row{padding:.4rem 0;border-bottom:1px solid var(--bd)}
+.test-point{display:flex;align-items:center;gap:1rem;padding:.75rem;background:var(--bg2);border-radius:8px;margin:.5rem 0;border-left:3px solid var(--ac)}
+.test-point .tp-num{background:var(--ac);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600}
+.test-point .tp-info{flex:1}
+.test-point .tp-info .label{font-size:.8rem;color:var(--txt2)}
+.test-point .tp-info .value{font-size:.95rem;color:var(--txt)}
+.mobile-menu-btn{display:none;background:none;border:none;color:var(--txt);font-size:1.5rem;cursor:pointer}
+@media(max-width:768px){.sidebar{position:fixed;left:-280px;top:65px;z-index:99;transition:left .3s}.sidebar.open{left:0}.mobile-menu-btn{display:block}.main{padding:1rem}.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:98}.overlay.show{display:block}}
+.search-box{padding:.75rem 1.25rem}
+.search-box input{width:100%;padding:.6rem .75rem;background:var(--bg3);border:1px solid var(--bd);border-radius:6px;color:var(--txt);font-size:.85rem}
+.search-box input:focus{outline:none;border-color:var(--ac)}
+.search-box input::placeholder{color:var(--txt2)}
+.component-card{background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:1.25rem;margin:1rem 0}
+.component-card h4{display:flex;align-items:center;gap:.5rem;margin-top:0}
+.component-card .sym{background:var(--bg3);padding:.2rem .5rem;border-radius:4px;font-family:monospace;font-size:.8rem;color:var(--ac)}
+.badge{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.75rem;font-weight:500;margin-left:.5rem}
+.badge.danger{background:rgba(248,81,73,.2);color:var(--dn)}
+.badge.warning{background:rgba(210,153,34,.2);color:var(--wn)}
+.badge.success{background:rgba(63,185,80,.2);color:var(--ok)}
+@media print{.sidebar,.header,.install-btn{display:none}.main{max-width:100%;padding:1rem}.content-section{display:block !important;page-break-before:always}.content-section:first-child{page-break-before:auto}}
+</style>
+</head>
+<body>
+<header class="header">
+<div class="logo">
+<div class="logo-icon">⚡</div>
+<div class="logo-text"><h1>EV Charger Repair Pro</h1><p>Professional SMPS Troubleshooting Guide</p></div>
+</div>
+<button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+<button class="install-btn" id="installBtn">Install App</button>
+</header>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+<div class="container">
+<aside class="sidebar" id="sidebar">
+<div class="search-box"><input type="text" id="searchInput" placeholder="Search topics..." onkeyup="searchContent()"></div>
+<nav class="nav-section">
+<div class="nav-title">Guide Sections</div>
+<a class="nav-item active" onclick="showSection('overview',this)"><span class="icon">📋</span> Charger Overview</a>
+<a class="nav-item" onclick="showSection('block-diagram',this)"><span class="icon">🧩</span> Block Diagram</a>
+<a class="nav-item" onclick="showSection('schematic',this)"><span class="icon">📐</span> Schematic Diagram</a>
+<a class="nav-item" onclick="showSection('ac-flow',this)"><span class="icon">⚡</span> AC Voltage Flow</a>
+<a class="nav-item" onclick="showSection('dc-flow',this)"><span class="icon">🔋</span> DC Conversion</a>
+<a class="nav-item" onclick="showSection('components',this)"><span class="icon">🔧</span> Component Analysis</a>
+<a class="nav-item" onclick="showSection('multimeter',this)"><span class="icon">📟</span> Multimeter Testing</a>
+<a class="nav-item" onclick="showSection('troubleshooting',this)"><span class="icon">🔍</span> Troubleshooting</a>
+<a class="nav-item" onclick="showSection('faults',this)"><span class="icon">⚠️</span> Common Faults</a>
+<a class="nav-item" onclick="showSection('repair',this)"><span class="icon">🛠️</span> Repair Procedure</a>
+<a class="nav-item" onclick="showSection('safety',this)"><span class="icon">🛡️</span> Safety Guidelines</a>
+</nav>
+</aside>
+<main class="main" id="mainContent">
+<section class="content-section active" id="overview">
+<h2>🔋 E-Bike Charger Overview</h2>
+<div class="highlight-box">
+<strong>Model Reference:</strong> SENATLA EV STL6075MC (Example SMPS Charger)<br>
+<strong>Topology:</strong> Flyback SMPS with UC384X PWM Controller<br>
+<strong>Application:</strong> E-Bike / EV Battery Charging
+</div>
+<h3>Charger Specifications</h3>
+<table>
+<tr><th>Parameter</th><th>Value</th></tr>
+<tr><td>Input Voltage</td><td><span class="value">220-240V AC</span> (50/60Hz)</td></tr>
+<tr><td>Output Voltage</td><td><span class="value">66.8V DC</span> (Example - varies by battery)</td></tr>
+<tr><td>Charging Current</td><td><span class="value">2A - 5A</span></td></tr>
+<tr><td>Power Rating</td><td><span class="value">~150W</span></td></tr>
+<tr><td>Battery Compatibility</td><td>16S Li-ion / 20S LiFePO4 (varies)</td></tr>
+<tr><td>SMPS Topology</td><td>Flyback Converter</td></tr>
+<tr><td>PWM Controller</td><td>UC3842 / UC3843 / UC3844</td></tr>
+<tr><td>Switching Frequency</td><td>~50-100 kHz</td></tr>
+</table>
+<h3>Supported Fault Conditions</h3>
+<ul>
+<li>Charger not turning ON</li>
+<li>No output voltage</li>
+<li>Fuse blowing repeatedly</li>
+<li>MOSFET short circuit</li>
+<li>Rectifier diode failure</li>
+<li>Capacitor burst / bulging</li>
+<li>Transformer winding issue</li>
+<li>No charging / battery not detected</li>
+<li>Overheating during operation</li>
+<li>LED indicator not working</li>
+<li>Output voltage low or high</li>
+<li>Auto-cutoff not functioning</li>
+</ul>
+<div class="success-box">
+<strong>💡 Pro Tip:</strong> Always start troubleshooting with visual inspection before applying power. Look for burnt components, bulging capacitors, and discolored PCB traces.
+</div>
+</section>
+
+<section class="content-section" id="block-diagram">
+<h2>🧩 Block Diagram</h2>
+<p>The e-bike SMPS charger consists of multiple functional blocks working together to convert AC mains power to regulated DC output for battery charging.</p>
+<div class="block-diagram">
+<div class="block ac">AC INPUT<br><small>220-240V</small></div>
+<div class="arrow">→</div>
+<div class="block ac">FUSE<br><small>Protection</small></div>
+<div class="arrow">→</div>
+<div class="block ac">MOV<br><small>Surge Protection</small></div>
+<div class="arrow">→</div>
+<div class="block ac">NTC<br><small>Inrush Limiter</small></div>
+<div class="arrow-down">↓</div>
+<div class="block ac">EMI FILTER<br><small>Noise Suppression</small></div>
+<div class="arrow-down">↓</div>
+<div class="block dc">BRIDGE RECTIFIER<br><small>AC → DC</small></div>
+<div class="arrow-down">↓</div>
+<div class="block dc">BULK CAPACITOR<br><small>~320V DC Filter</small></div>
+<div class="arrow-down">↓</div>
+<div class="block control">PWM CONTROLLER<br><small>UC384X IC</small></div>
+<div class="arrow-down">↓</div>
+<div class="block control">MOSFET SWITCH<br><small>High Frequency</small></div>
+<div class="arrow-down">↓</div>
+<div class="block control">HF TRANSFORMER<br><small>Isolation + Step-down</small></div>
+<div class="arrow-down">↓</div>
+<div class="block output">SECONDARY RECTIFIER<br><small>Fast Recovery Diode</small></div>
+<div class="arrow-down">↓</div>
+<div class="block output">LC FILTER<br><small>Coil + Capacitor</small></div>
+<div class="arrow-down">↓</div>
+<div class="block output">OUTPUT RELAY<br><small>Protection Switch</small></div>
+<div class="arrow-down">↓</div>
+<div class="block output">DC OUTPUT<br><small>66.8V to Battery</small></div>
+</div>
+<h3>Block Descriptions</h3>
+<div class="component-card">
+<h4><span class="sym">AC INPUT</span> Input Protection Stage</h4>
+<p><strong>Fuse (F1):</strong> Protects against overcurrent and short circuits. Rating typically 2A-5A.</p>
+<p><strong>MOV (Metal Oxide Varistor):</strong> Clamps voltage spikes from mains. Shunts surge energy to ground.</p>
+<p><strong>NTC Thermistor:</strong> Limits inrush current when capacitor is empty. Resistance decreases as it heats up.</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">RECT</span> Rectification Stage</h4>
+<p><strong>Bridge Rectifier:</strong> Converts AC to pulsating DC using 4 diodes (or integrated bridge).</p>
+<p><strong>Bulk Capacitor:</strong> Filters pulsating DC to smooth ~320V DC. Typical values: 68µF-150µF @ 400V.</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">PWM</span> Switching Control Stage</h4>
+<p><strong>UC384X PWM IC:</strong> Generates high-frequency switching pulses (50-100kHz) to drive MOSFET.</p>
+<p><strong>MOSFET:</strong> Switches high voltage across transformer primary at high frequency.</p>
+<p><strong>HF Transformer:</strong> Provides galvanic isolation and steps down voltage while stepping up current.</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">OUT</span> Output Stage</h4>
+<p><strong>Secondary Rectifier:</strong> Fast recovery or Schottky diode rectifies high-frequency AC from transformer secondary.</p>
+<p><strong>LC Filter:</strong> Toroid inductor + electrolytic capacitor smooths output to pure DC.</p>
+<p><strong>Feedback Circuit:</strong> TL431 + Optocoupler monitors output voltage and regulates PWM duty cycle.</p>
+<p><strong>Output Relay:</strong> Disconnects battery when charging complete or fault detected.</p>
+</div>
+</section>
+<section class="content-section" id="schematic">
+<h2>📐 Schematic Diagram</h2>
+<div class="warning-box">
+<div class="title">⚠️ HIGH VOLTAGE WARNING</div>
+<p>Primary section contains <strong>~320V DC</strong> which can be lethal. Always discharge capacitors before servicing.</p>
+</div>
+<h3>AC Input Section</h3>
+<div class="schematic">L ---[F1 Fuse]---[NTC]---[BR1 Bridge]---+320V
+ |                      |                |
+MOV                    EMI              C11 Bulk
+ |                      |                |
+N ----------------------+--------------- GND</div>
+<h3>PWM Control Section (UC384X)</h3>
+<div class="schematic">+320V ---- T1 Primary ---- Q1 Drain
+                          |
+                    Q1 Source -- R_sense -- GND
+                          |
+                    Gate <-- Pin 6 (Output)
+                          |
+Pin 7 VCC <--- Startup R ---+320V
+Pin 5 GND ------------------ GND
+Pin 2 VFB <--- Optocoupler -- FB
+Pin 3 CS  <--- R_sense ----- GND
+Pin 4 RT/CT -- Timing C/R -- GND
+Pin 8 VREF -- 5V Ref</div>
+<h3>Secondary & Feedback Section</h3>
+<div class="schematic">T1 Secondary ---[D15 Fast Diode]---[L1 Toroid]---+VOUT (66.8V)
+ |                                    |
+GND Sec                           [C53 Output]
+                                     |
+                                [R1]-[R2] Divider
+                                     |
+                                TL431 REF (2.5V)
+                                     |
+                                Opto LED ---+--- Opto Transistor --> Primary FB</div>
+<h3>UC384X Standard Pinout</h3>
+<div class="pinout">
+<div class="pinout-header">Pin</div><div class="pinout-header">Function</div><div class="pinout-header">Description</div>
+<div class="pinout-row">1</div><div class="pinout-row">COMP</div><div class="pinout-row">Compensation / Error Amp Output</div>
+<div class="pinout-row">2</div><div class="pinout-row">VFB</div><div class="pinout-row">Voltage Feedback Input</div>
+<div class="pinout-row">3</div><div class="pinout-row">ISENSE/CS</div><div class="pinout-row">Current Sense Input</div>
+<div class="pinout-row">4</div><div class="pinout-row">RT/CT</div><div class="pinout-row">Timing Resistor/Capacitor</div>
+<div class="pinout-row">5</div><div class="pinout-row">GND</div><div class="pinout-row">Ground Reference</div>
+<div class="pinout-row">6</div><div class="pinout-row">OUTPUT</div><div class="pinout-row">Gate Drive to MOSFET</div>
+<div class="pinout-row">7</div><div class="pinout-row">VCC</div><div class="pinout-row">Supply Voltage 12-18V</div>
+<div class="pinout-row">8</div><div class="pinout-row">VREF</div><div class="pinout-row">5V Reference Output</div>
+</div>
+</section>
+
+<section class="content-section" id="ac-flow">
+<h2>⚡ AC Voltage Flow Analysis</h2>
+<p>Step-by-step voltage flow through the AC input section of the charger.</p>
+<h3>Test Points & Expected Readings</h3>
+<div class="test-point">
+<div class="tp-num">1</div>
+<div class="tp-info"><div class="label">AC Input Terminals (L-N)</div><div class="value">Expected: 220-240V AC</div></div>
+</div>
+<div class="test-point">
+<div class="tp-num">2</div>
+<div class="tp-info"><div class="label">After Fuse (F1)</div><div class="value">Expected: 220-240V AC</div></div>
+</div>
+<div class="test-point">
+<div class="tp-num">3</div>
+<div class="tp-info"><div class="label">After MOV / NTC</div><div class="value">Expected: 220-240V AC (slight drop normal)</div></div>
+</div>
+<div class="test-point">
+<div class="tp-num">4</div>
+<div class="tp-info"><div class="label">Bridge Rectifier Input</div><div class="value">Expected: 220-240V AC</div></div>
+</div>
+<div class="test-point">
+<div class="tp-num">5</div>
+<div class="tp-info"><div class="label">Bridge Rectifier Output (+/-)</div><div class="value">Expected: 310-325V DC</div></div>
+</div>
+<div class="test-point">
+<div class="tp-num">6</div>
+<div class="tp-info"><div class="label">Bulk Capacitor (C11)</div><div class="value">Expected: 300-325V DC</div></div>
+</div>
+<h3>Voltage Calculation</h3>
+<div class="highlight-box">
+<strong>Peak DC Voltage = AC RMS x 1.414</strong><br>
+For 230V AC: 230 x 1.414 = <span class="value">325V DC</span><br>
+Under load: <span class="value">310-320V DC</span> (typical)
+</div>
+<h3>Fault Conditions</h3>
+<table>
+<tr><th>Fault</th><th>Symptom</th><th>Cause</th></tr>
+<tr><td>No AC at TP2</td><td>0V after fuse</td><td class="fault">Blown fuse</td></tr>
+<tr><td>Low at TP5</td><td>&lt;200V DC</td><td class="fault">Open diode in bridge</td></tr>
+<tr><td>0V at TP5</td><td>No DC output</td><td class="fault">Dead bridge rectifier</td></tr>
+<tr><td>AC at TP5</td><td>Pulsating, not DC</td><td class="fault">Open / dry bulk capacitor</td></tr>
+<tr><td>Low at TP6</td><td>&lt;250V with load</td><td class="fault">High ESR capacitor</td></tr>
+</table>
+<h3>Testing Method</h3>
+<ol>
+<li>Set multimeter to <strong>AC Voltage mode</strong> (750V range)</li>
+<li>Measure across L and N terminals</li>
+<li>Check fuse continuity with power OFF</li>
+<li>Set multimeter to <strong>DC Voltage mode</strong> (1000V range)</li>
+<li>Measure across bulk capacitor</li>
+<li>If voltage drops rapidly when unplugged, capacitor may be weak</li>
+</ol>
+</section>
+<section class="content-section" id="dc-flow">
+<h2>🔋 AC to DC Conversion Process</h2>
+<h3>1. Rectification</h3>
+<p>The bridge rectifier converts the sinusoidal AC waveform into a pulsating DC waveform. Only positive half-cycles pass through, creating voltage peaks at 100Hz (for 50Hz mains).</p>
+<h3>2. Filtering</h3>
+<p>The bulk electrolytic capacitor (C11) charges to the peak voltage (~325V) and discharges between peaks, smoothing the pulsating DC.</p>
+<div class="highlight-box">
+<strong>Typical Bulk Cap Values:</strong><br>
+- 68uF / 400V (small chargers)<br>
+- 100uF / 400V (standard)<br>
+- 150uF / 400V (high power)<br>
+<span class="fault">Note: 1mF (1000uF) as shown in some diagrams is unusual for primary side.</span>
+</div>
+<h3>3. High-Frequency Switching</h3>
+<p>The PWM controller (UC384X) generates pulses at 50-100kHz to drive the MOSFET. By varying the duty cycle, the output voltage is regulated.</p>
+<h3>4. High-Frequency Transformation</h3>
+<p>The HF transformer transfers energy from primary to secondary at high frequency. Because frequency is high, the transformer can be much smaller than a 50Hz transformer of equivalent power.</p>
+<h3>5. Secondary Rectification</h3>
+<p>A fast recovery diode or Schottky diode rectifies the high-frequency AC from the transformer secondary. Schottky diodes have lower forward voltage drop (~0.3V) but lower voltage rating.</p>
+<h3>6. Output Filtering</h3>
+<p>A toroid inductor (choke) in series with a large electrolytic capacitor forms an LC filter. This removes switching ripple and provides smooth DC to the battery.</p>
+<h3>7. Feedback Regulation</h3>
+<p>The TL431 shunt regulator compares a divided sample of output voltage to its 2.5V internal reference. If output rises, TL431 conducts more, increasing optocoupler LED current. The optocoupler transistor pulls down VFB on the PWM IC, reducing duty cycle and lowering output.</p>
+<div class="block-diagram" style="text-align:left;font-size:.9rem">
+<strong>Feedback Loop:</strong><br><br>
+Output Voltage UP -> Divider Voltage UP -> TL431 conducts more -> Opto LED brighter -> Opto Transistor conducts more -> VFB Pin 2 voltage DOWN -> PWM reduces duty cycle -> Output Voltage DOWN<br><br>
+<em>(Negative feedback maintains stable output)</em>
+</div>
+</section>
+
+<section class="content-section" id="components">
+<h2>🔧 Component Identification & Analysis</h2>
+<div class="component-card">
+<h4><span class="sym">F1</span> Fuse <span class="badge danger">High Risk</span></h4>
+<p><strong>Function:</strong> Overcurrent protection. Opens circuit when current exceeds rating.</p>
+<p><strong>Working:</strong> Metal wire melts when I2t energy exceeds limit.</p>
+<p><strong>Failure Symptoms:</strong> Open circuit, blackened glass, broken wire.</p>
+<p><strong>Testing:</strong> Continuity mode -> <span class="value">Beep / 0 Ohm</span> = Good | <span class="fault">OL</span> = Blown</p>
+<p><strong>Common Cause:</strong> MOSFET short, bridge short, capacitor short.</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">MOV1</span> Metal Oxide Varistor</h4>
+<p><strong>Function:</strong> Surge protection. Clamps voltage transients.</p>
+<p><strong>Working:</strong> High resistance at normal voltage, becomes conductive above clamp voltage (typically 275V AC).</p>
+<p><strong>Failure Symptoms:</strong> Burned, cracked, or shorted (0 Ohm).</p>
+<p><strong>Testing:</strong> Resistance mode -> Should read <span class="value">>1M Ohm</span> | <span class="fault">0 Ohm or low</span> = Failed</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">NTC</span> NTC Thermistor</h4>
+<p><strong>Function:</strong> Inrush current limiting.</p>
+<p><strong>Working:</strong> High cold resistance (10-50 Ohm), drops to <1 Ohm when hot.</p>
+<p><strong>Failure Symptoms:</strong> Open circuit (no power), or stays high resistance (slow start).</p>
+<p><strong>Testing:</strong> Resistance mode cold -> <span class="value">10-50 Ohm</span> typical | <span class="fault">OL</span> = Open</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">BR1</span> Bridge Rectifier <span class="badge danger">High Risk</span></h4>
+<p><strong>Function:</strong> AC to DC conversion.</p>
+<p><strong>Working:</strong> 4 diodes in bridge configuration allow both half-cycles to contribute to DC output.</p>
+<p><strong>Failure Symptoms:</strong> No DC output, low output, or fuse blowing.</p>
+<p><strong>Testing:</strong> Diode mode across AC-AC, AC-+, AC-- -> <span class="value">0.4-0.7V one way</span> | <span class="fault">0V both ways = Short</span></p>
+</div>
+<div class="component-card">
+<h4><span class="sym">C11</span> Bulk Capacitor <span class="badge danger">High Risk</span></h4>
+<p><strong>Function:</strong> Filters rectified DC to smooth voltage.</p>
+<p><strong>Working:</strong> Stores charge at peak voltage, supplies current between peaks.</p>
+<p><strong>Failure Symptoms:</strong> Bulging top, leakage, low capacitance, high ESR, open circuit.</p>
+<p><strong>Testing:</strong> Visual inspection + ESR meter -> <span class="value">ESR <2 Ohm typical</span> | <span class="fault">Bulging / High ESR</span> = Replace</p>
+<p><strong>Value:</strong> Typically 68uF-150uF @ 400V-450V</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">U5</span> UC384X PWM Controller</h4>
+<p><strong>Function:</strong> Generates regulated switching pulses.</p>
+<p><strong>Working:</strong> Oscillator sets frequency, error amplifier compares feedback, PWM comparator sets duty cycle, output driver drives MOSFET gate.</p>
+<p><strong>Failure Symptoms:</strong> No switching, erratic pulses, no VCC startup.</p>
+<p><strong>Testing:</strong> Check VCC (Pin 7) = <span class="value">12-18V</span>, VREF (Pin 8) = <span class="value">5V</span>, Output (Pin 6) = pulsing.</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">Q1</span> MOSFET <span class="badge danger">High Risk</span></h4>
+<p><strong>Function:</strong> High-frequency switching of transformer primary.</p>
+<p><strong>Working:</strong> Gate voltage controls drain-source conduction. Switches hundreds of volts at high frequency.</p>
+<p><strong>Failure Symptoms:</strong> Short (fuse blows), open (no output), or degraded (overheating).</p>
+<p><strong>Testing:</strong> Diode mode D-S -> <span class="value">OL both ways</span> = Good | <span class="fault">0.2-0.6V</span> = Short</p>
+<p><strong>Common Types:</strong> 2N60, 4N60, 7N60, 10N60 (600V N-channel)</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">T1</span> HF Transformer</h4>
+<p><strong>Function:</strong> Energy transfer, isolation, voltage transformation.</p>
+<p><strong>Working:</strong> Primary energy stored in core during ON time, transferred to secondary during OFF time (flyback operation).</p>
+<p><strong>Failure Symptoms:</strong> Open winding (no output), shorted turns (overheating, low output), arcing.</p>
+<p><strong>Testing:</strong> Resistance mode -> Primary: <span class="value">1-10 Ohm</span>, Secondary: <span class="value">0.1-1 Ohm</span> | <span class="fault">OL</span> = Open winding</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">D15</span> Output Rectifier Diode</h4>
+<p><strong>Function:</strong> Rectifies high-frequency AC from secondary.</p>
+<p><strong>Working:</strong> Fast recovery or Schottky diode with low reverse recovery time.</p>
+<p><strong>Failure Symptoms:</strong> Short (low output, overheating), open (no output).</p>
+<p><strong>Testing:</strong> Diode mode -> <span class="value">0.3-0.6V one way</span> | <span class="fault">0V both ways</span> = Short</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">L1</span> Toroid Inductor (Choke)</h4>
+<p><strong>Function:</strong> Output filtering, ripple reduction.</p>
+<p><strong>Working:</strong> Opposes rapid current changes, stores energy in magnetic field.</p>
+<p><strong>Failure Symptoms:</strong> Open (high ripple, noise), shorted turns (overheating).</p>
+<p><strong>Testing:</strong> Resistance mode -> <span class="value"><1 Ohm</span> | <span class="fault">OL</span> = Open</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">U3</span> TL431 Shunt Regulator</h4>
+<p><strong>Function:</strong> Precision voltage reference and error amplifier.</p>
+<p><strong>Working:</strong> Compares REF pin to 2.5V internal reference. Conducts when REF > 2.5V.</p>
+<p><strong>Failure Symptoms:</strong> Output voltage too high or too low, unstable.</p>
+<p><strong>Testing:</strong> Check cathode-anode voltage with varying input -> should regulate at ~2.5V on REF pin.</p>
+</div>
+<div class="component-card">
+<h4><span class="sym">U4</span> Optocoupler (PC817, etc.)</h4>
+<p><strong>Function:</strong> Isolated feedback from secondary to primary.</p>
+<p><strong>Working:</strong> LED current controls phototransistor conduction across isolation barrier.</p>
+<p><strong>Failure Symptoms:</strong> No regulation, output too high, LED not lighting.</p>
+<p><strong>Testing:</strong> Diode mode on LED side -> <span class="value">~1.1V one way</span>. Transistor side -> <span class="value">OL both ways</span> (unpowered).</p>
+</div>
+</section>
+<section class="content-section" id="multimeter">
+<h2>📟 Multimeter Testing Procedure</h2>
+<div class="warning-box">
+<div class="title">⚠️ SAFETY FIRST</div>
+<p>• Always unplug charger before resistance/continuity tests<br>
+• Discharge bulk capacitors with 10k Ohm resistor before touching<br>
+• Use series bulb tester when first powering up after repair<br>
+• Never touch primary side with power ON unless trained</p>
+</div>
+<h3>Test Mode Reference</h3>
+<table>
+<tr><th>Mode</th><th>Symbol</th><th>Use For</th></tr>
+<tr><td>Continuity</td><td>Speaker</td><td>Fuses, windings, traces, connections</td></tr>
+<tr><td>Diode</td><td>Diode</td><td>Diodes, bridge rectifiers, MOSFETs, transistors</td></tr>
+<tr><td>Resistance</td><td>Ohm</td><td>Resistors, NTC, transformer windings</td></tr>
+<tr><td>DC Voltage</td><td>V DC</td><td>Capacitors, output, VCC, feedback</td></tr>
+<tr><td>AC Voltage</td><td>V AC</td><td>Input mains, transformer secondary (careful!)</td></tr>
+</table>
+<h3>Step-by-Step Testing</h3>
+<h4>Step 1: Fuse Test (Continuity Mode)</h4>
+<table>
+<tr><th>Condition</th><th>Reading</th><th>Result</th></tr>
+<tr><td>Good Fuse</td><td><span class="value">Beep + 0 Ohm</span></td><td>Pass</td></tr>
+<tr><td>Blown Fuse</td><td><span class="fault">OL (Open)</span></td><td>Replace</td></tr>
+</table>
+<h4>Step 2: Bridge Rectifier Test (Diode Mode)</h4>
+<p>Test each diode in the bridge:</p>
+<table>
+<tr><th>Test</th><th>Red Probe</th><th>Black Probe</th><th>Good</th><th>Bad</th></tr>
+<tr><td>AC to +</td><td>AC</td><td>+</td><td><span class="value">0.4-0.7V</span></td><td><span class="fault">0V or OL</span></td></tr>
+<tr><td>AC to -</td><td>-</td><td>AC</td><td><span class="value">0.4-0.7V</span></td><td><span class="fault">0V or OL</span></td></tr>
+<tr><td>Reverse</td><td>+</td><td>AC</td><td><span class="value">OL</span></td><td><span class="fault">Any reading</span></td></tr>
+</table>
+<h4>Step 3: MOSFET Test (Diode + Resistance Mode)</h4>
+<p><strong>Power OFF, capacitor discharged!</strong></p>
+<table>
+<tr><th>Test</th><th>Red Probe</th><th>Black Probe</th><th>Good</th><th>Bad</th></tr>
+<tr><td>Drain-Source</td><td>Drain</td><td>Source</td><td><span class="value">OL</span></td><td><span class="fault">0 Ohm or low</span></td></tr>
+<tr><td>Gate-Source</td><td>Gate</td><td>Source</td><td><span class="value">OL (no short)</span></td><td><span class="fault">0 Ohm</span></td></tr>
+<tr><td>Gate-Drain</td><td>Gate</td><td>Drain</td><td><span class="value">OL (no short)</span></td><td><span class="fault">0 Ohm</span></td></tr>
+</table>
+<h4>Step 4: Capacitor Test</h4>
+<table>
+<tr><th>Method</th><th>Good</th><th>Bad</th></tr>
+<tr><td>Visual</td><td><span class="value">Flat top, no leakage</span></td><td><span class="fault">Bulging, leaking, vented</span></td></tr>
+<tr><td>Resistance Mode</td><td><span class="value">Brief charge then OL</span></td><td><span class="fault">0 Ohm (short) or no charge</span></td></tr>
+<tr><td>ESR Meter</td><td><span class="value">ESR < rated value</span></td><td><span class="fault">High ESR, open</span></td></tr>
+</table>
+<h4>Step 5: Transformer Winding Test (Resistance Mode)</h4>
+<table>
+<tr><th>Winding</th><th>Expected</th><th>Fault</th></tr>
+<tr><td>Primary</td><td><span class="value">1-10 Ohm</span></td><td><span class="fault">OL (open)</span></td></tr>
+<tr><td>Secondary</td><td><span class="value">0.1-1 Ohm</span></td><td><span class="fault">OL (open)</span></td></tr>
+<tr><td>Auxiliary / VCC</td><td><span class="value">1-20 Ohm</span></td><td><span class="fault">OL (open)</span></td></tr>
+<tr><td>Primary to Secondary</td><td><span class="value">OL (isolation)</span></td><td><span class="fault">Any reading (shorted)</span></td></tr>
+</table>
+<h4>Step 6: Output Voltage Test (DC Voltage Mode)</h4>
+<table>
+<tr><th>Test Point</th><th>Expected</th><th>Fault</th></tr>
+<tr><td>AC Input</td><td><span class="value">220-240V AC</span></td><td><span class="fault">0V (no mains)</span></td></tr>
+<tr><td>Bulk Capacitor</td><td><span class="value">310-325V DC</span></td><td><span class="fault">0V or low</span></td></tr>
+<tr><td>UC384X VCC (Pin 7)</td><td><span class="value">12-18V DC</span></td><td><span class="fault">0V or <10V</span></td></tr>
+<tr><td>UC384X VREF (Pin 8)</td><td><span class="value">5.0V DC</span></td><td><span class="fault">0V or wrong</span></td></tr>
+<tr><td>MOSFET Gate</td><td><span class="value">Pulsing 10-15V</span></td><td><span class="fault">0V or DC</span></td></tr>
+<tr><td>Output Capacitor</td><td><span class="value">66.8V DC (rated)</span></td><td><span class="fault">0V or wrong</span></td></tr>
+</table>
+</section>
+
+<section class="content-section" id="troubleshooting">
+<h2>🔍 Troubleshooting Flowchart</h2>
+<h3>Problem: Charger Dead (No Power / No LED)</h3>
+<div class="flowchart">
+<div class="flow-step decision">Check AC Input<br><small>220-240V present?</small></div>
+<div class="flow-branch">
+<div><div class="flow-label">NO -> Check mains socket, cable</div></div>
+<div><div class="flow-label">YES -> Continue</div></div>
+</div>
+<div class="flow-step decision">Check Fuse (F1)<br><small>Continuity good?</small></div>
+<div class="flow-branch">
+<div><div class="flow-label">NO -> Replace fuse, check why it blew</div></div>
+<div><div class="flow-label">YES -> Continue</div></div>
+</div>
+<div class="flow-step decision">Check Bridge Rectifier<br><small>Diode test pass?</small></div>
+<div class="flow-branch">
+<div><div class="flow-label">NO -> Replace bridge rectifier</div></div>
+<div><div class="flow-label">YES -> Continue</div></div>
+</div>
+<div class="flow-step decision">Check Bulk Cap Voltage<br><small>~320V DC present?</small></div>
+<div class="flow-branch">
+<div><div class="flow-label">NO -> Check capacitor, traces</div></div>
+<div><div class="flow-label">YES -> Continue</div></div>
+</div>
+<div class="flow-step decision">Check UC384X VCC<br><small>12-18V present?</small></div>
+<div class="flow-branch">
+<div><div class="flow-label">NO -> Check startup resistor, VCC diode, aux winding</div></div>
+<div><div class="flow-label">YES -> Continue</div></div>
+</div>
+<div class="flow-step decision">Check MOSFET<br><small>No drain-source short?</small></div>
+<div class="flow-branch">
+<div><div class="flow-label">NO -> Replace MOSFET + check gate drive</div></div>
+<div><div class="flow-label">YES -> Continue</div></div>
+</div>
+<div class="flow-step decision">Check Transformer<br><small>Windings good?</small></div>
+<div class="flow-branch">
+<div><div class="flow-label">NO -> Replace transformer</div></div>
+<div><div class="flow-label">YES -> Continue</div></div>
+</div>
+<div class="flow-step decision">Check Secondary Output<br><small>~66.8V present?</small></div>
+<div class="flow-branch">
+<div><div class="flow-label">NO -> Check secondary diode, output cap, feedback</div></div>
+<div><div class="flow-label">YES -> Charger working!</div></div>
+</div>
+<div class="flow-step end">Charger Repaired!</div>
+</div>
+<h3>Quick Fault Isolation Guide</h3>
+<table>
+<tr><th>Symptom</th><th>Most Likely Cause</th><th>Check First</th></tr>
+<tr><td>Fuse blows instantly</td><td>Short in primary</td><td>MOSFET, Bridge, Bulk Cap</td></tr>
+<tr><td>Fuse blows after seconds</td><td>Overcurrent / soft start fail</td><td>NTC, PWM IC, transformer</td></tr>
+<tr><td>No output, LED off</td><td>No primary switching</td><td>VCC, PWM IC, MOSFET gate</td></tr>
+<tr><td>No output, LED on</td><td>Secondary fault</td><td>Output diode, feedback, relay</td></tr>
+<tr><td>Low output voltage</td><td>Regulation issue</td><td>Feedback, TL431, optocoupler</td></tr>
+<tr><td>High output voltage</td><td>Feedback failure</td><td>TL431, optocoupler, divider resistors</td></tr>
+<tr><td>Overheating</td><td>Inefficient switching</td><td>MOSFET, transformer, caps</td></tr>
+<tr><td>Output ripple high</td><td>Filter failure</td><td>Output cap, toroid inductor</td></tr>
+</table>
+</section>
+<section class="content-section" id="faults">
+<h2>⚠️ Common Fault Analysis</h2>
+<div class="component-card">
+<h4>🔴 Fault 1: Charger Completely Dead</h4>
+<p><strong>Symptoms:</strong> No LED, no output, no signs of life.</p>
+<p><strong>Primary Suspects:</strong></p>
+<ul>
+<li><span class="fault">Blown Fuse</span> - Check continuity. If blown, DO NOT just replace - find cause!</li>
+<li><span class="fault">Open NTC</span> - Measure resistance (should be 10-50 Ohm cold)</li>
+<li><span class="fault">Dead Bridge Rectifier</span> - Test all 4 diodes</li>
+<li><span class="fault">Open Startup Resistor</span> - High value resistor (100k-500k) feeding VCC</li>
+<li><span class="fault">Dead PWM IC</span> - No VCC or no oscillation</li>
+</ul>
+<p><strong>Repair:</strong> Replace faulty component, verify no shorts before repowering.</p>
+</div>
+<div class="component-card">
+<h4>🔴 Fault 2: Fuse Blows Immediately</h4>
+<p><strong>Symptoms:</strong> Fuse pops as soon as plugged in.</p>
+<p><strong>Primary Suspects:</strong></p>
+<ul>
+<li><span class="fault">Shorted MOSFET</span> - Most common cause. Drain-Source reads ~0 Ohm.</li>
+<li><span class="fault">Shorted Bridge Rectifier</span> - AC pins shorted to DC output</li>
+<li><span class="fault">Shorted Bulk Capacitor</span> - Internal dielectric breakdown</li>
+<li><span class="fault">Shorted MOV</span> - After surge event, MOV can fail short</li>
+<li><span class="fault">Transformer Primary Short</span> - Less common but possible</li>
+</ul>
+<p><strong>Repair:</strong> Use diode/continuity mode to find the short. Replace all damaged components. Check gate drive before installing new MOSFET.</p>
+</div>
+<div class="component-card">
+<h4>🟡 Fault 3: No DC Output (But Primary Seems OK)</h4>
+<p><strong>Symptoms:</strong> Charger powers on, LED may work, but no voltage at output.</p>
+<p><strong>Primary Suspects:</strong></p>
+<ul>
+<li><span class="fault">Open Secondary Diode</span> - Fast recovery diode failed open</li>
+<li><span class="fault">Open Output Capacitor</span> - No filtering, but some voltage may still appear</li>
+<li><span class="fault">Transformer Secondary Open</span> - Winding break</li>
+<li><span class="fault">Open Output Relay</span> - Contacts not closing</li>
+<li><span class="fault">Broken PCB Trace</span> - Secondary side trace damage</li>
+</ul>
+<p><strong>Repair:</strong> Check secondary diode first (most common). Test transformer secondary resistance.</p>
+</div>
+<div class="component-card">
+<h4>🟡 Fault 4: Output Voltage Too Low</h4>
+<p><strong>Symptoms:</strong> Output present but below rated voltage (e.g., 50V instead of 66.8V).</p>
+<p><strong>Primary Suspects:</strong></p>
+<ul>
+<li><span class="fault">Weak Output Capacitor</span> - High ESR causes voltage drop under load</li>
+<li><span class="fault">Weak Secondary Diode</span> - High forward voltage drop</li>
+<li><span class="fault">Feedback Issue</span> - TL431 or optocoupler not regulating properly</li>
+<li><span class="fault">Transformer Issue</span> - Partially shorted turns reduce output</li>
+<li><span class="fault">Low Input Voltage</span> - Mains voltage below 200V</li>
+</ul>
+<p><strong>Repair:</strong> Test capacitor ESR, check feedback circuit voltages, verify TL431 reference.</p>
+</div>
+<div class="component-card">
+<h4>🟡 Fault 5: Output Voltage Too High</h4>
+<p><strong>Symptoms:</strong> Output exceeds rated voltage (e.g., 80V instead of 66.8V). DANGEROUS for battery!</p>
+<p><strong>Primary Suspects:</strong></p>
+<ul>
+<li><span class="fault">Open Feedback Loop</span> - Optocoupler LED not conducting</li>
+<li><span class="fault">Dead TL431</span> - Not conducting to drive optocoupler</li>
+<li><span class="fault">Open Divider Resistor</span> - Voltage sense divider broken</li>
+<li><span class="fault">Shorted Optocoupler Transistor</span> - Always conducting, confusing PWM</li>
+</ul>
+<p><strong>Repair:</strong> Check optocoupler LED with diode mode. Verify TL431 reference pin at 2.5V. Check divider resistors.</p>
+</div>
+<div class="component-card">
+<h4>🟠 Fault 6: Overheating</h4>
+<p><strong>Symptoms:</strong> Charger gets very hot during operation, may shut down thermally.</p>
+<p><strong>Primary Suspects:</strong></p>
+<ul>
+<li><span class="fault">MOSFET Leakage</span> - Not fully turning off, causing resistive heating</li>
+<li><span class="fault">High ESR Capacitors</span> - Bulk or output caps heating up</li>
+<li><span class="fault">Shorted Load</span> - Battery or cable short causing overcurrent</li>
+<li><span class="fault">Transformer Saturation</span> - Core saturating, excessive current</li>
+<li><span class="fault">Poor Ventilation</span> - Dust blocked, fan failure (if equipped)</li>
+</ul>
+<p><strong>Repair:</strong> Check MOSFET switching waveform. Replace old capacitors. Verify load is not shorted.</p>
+</div>
+<div class="component-card">
+<h4>🟠 Fault 7: Battery Not Charging / Not Detected</h4>
+<p><strong>Symptoms:</strong> Charger output OK but battery does not charge, or charging stops early.</p>
+<p><strong>Primary Suspects:</strong></p>
+<ul>
+<li><span class="fault">Low Output Voltage</span> - Battery voltage higher than charger output</li>
+<li><span class="fault">Faulty Connector</span> - Bad contact, wrong polarity</li>
+<li><span class="fault">BMS Protection</span> - Battery BMS blocking charge</li>
+<li><span class="fault">Relay Not Closing</span> - Output relay stuck open</li>
+<li><span class="fault">Auto-Cutoff Issue</span> - Charger thinks battery is full</li>
+</ul>
+<p><strong>Repair:</strong> Verify output voltage > battery voltage. Check connectors. Test with known good battery.</p>
+</div>
+<div class="component-card">
+<h4>🟢 Fault 8: LED Not Working</h4>
+<p><strong>Symptoms:</strong> Charger works but no status indication.</p>
+<p><strong>Primary Suspects:</strong></p>
+<ul>
+<li><span class="fault">Burned LED</span> - Overcurrent or age failure</li>
+<li><span class="fault">Open LED Resistor</span> - Current limiting resistor open</li>
+<li><span class="fault">Bad Solder Joint</span> - LED not making contact</li>
+<li><span class="fault">Control Circuit Issue</span> - LED driver transistor failed</li>
+</ul>
+<p><strong>Repair:</strong> Check LED with diode mode (should light dimly). Verify series resistor value.</p>
+</div>
+</section>
+
+<section class="content-section" id="repair">
+<h2>🛠️ Repair Procedure</h2>
+<div class="warning-box">
+<div class="title">⚠️ CRITICAL SAFETY STEPS</div>
+<p>1. <strong>UNPLUG</strong> charger from mains before opening<br>
+2. <strong>DISCHARGE</strong> bulk capacitors with 10k Ohm 5W resistor (hold for 10 seconds)<br>
+3. <strong>VERIFY</strong> 0V across bulk capacitor with multimeter<br>
+4. <strong>USE</strong> isolation transformer if available<br>
+5. <strong>WEAR</strong> safety glasses - capacitors can explode<br>
+6. <strong>WORK</strong> on insulated mat</p>
+</div>
+<h3>Step-by-Step Repair Process</h3>
+<h4>Step 1: Visual Inspection</h4>
+<div class="highlight-box">
+<ul>
+<li>Look for <span class="fault">burnt components</span> (blackened, charred)</li>
+<li>Check for <span class="fault">bulging capacitors</span> (domed top, leaked electrolyte)</li>
+<li>Inspect <span class="fault">discolored PCB traces</span> (brown/black instead of green/copper)</li>
+<li>Look for <span class="fault">cracked components</span> or broken leads</li>
+<li>Check for <span class="fault">foreign objects</span> or insect damage</li>
+<li>Smell for <span class="fault">burned odor</span> (acrid, distinctive)</li>
+</ul>
+</div>
+<h4>Step 2: Document & Photograph</h4>
+<p>Before removing anything, take clear photos of:</p>
+<ul>
+<li>Overall PCB top and bottom</li>
+<li>Any damaged areas close-up</li>
+<li>Component markings and values</li>
+<li>Wire connections and routing</li>
+</ul>
+<h4>Step 3: Short Circuit Testing (Power OFF)</h4>
+<table>
+<tr><th>Test Location</th><th>Mode</th><th>Good</th><th>Bad</th></tr>
+<tr><td>AC Input (L-N)</td><td>Resistance</td><td><span class="value">>100k Ohm</span></td><td><span class="fault"><1k Ohm</span></td></tr>
+<tr><td>Bulk Cap (+ to -)</td><td>Resistance</td><td><span class="value">Brief charge then OL</span></td><td><span class="fault">0 Ohm</span></td></tr>
+<tr><td>MOSFET D-S</td><td>Diode</td><td><span class="value">OL</span></td><td><span class="fault">0.2-0.6V</span></td></tr>
+<tr><td>Output (+ to -)</td><td>Resistance</td><td><span class="value">>1k Ohm</span></td><td><span class="fault"><10 Ohm</span></td></tr>
+</table>
+<h4>Step 4: Remove Faulty Components</h4>
+<p>Use proper desoldering technique:</p>
+<ul>
+<li>Heat sink large pads with preheater if available</li>
+<li>Use desoldering pump or braid for through-hole</li>
+<li>For SMD, use hot air station with proper nozzle</li>
+<li>Do not force components - risk lifting PCB pads</li>
+<li>Clean pads with solder wick and flux</li>
+</ul>
+<h4>Step 5: Replace with Equivalent Parts</h4>
+<table>
+<tr><th>Component</th><th>Selection Criteria</th><th>Common Substitutes</th></tr>
+<tr><td>MOSFET</td><td>VDS >= 600V, ID >= rated, RDS(on) low</td><td>2N60 -> 4N60 -> 7N60 -> 10N60</td></tr>
+<tr><td>Bulk Cap</td><td>Voltage >= 400V, Capacitance match</td><td>68uF -> 100uF -> 150uF @ 400V</td></tr>
+<tr><td>Output Cap</td><td>Voltage >= 1.5x output, Low ESR</td><td>100V, 470uF-2200uF</td></tr>
+<tr><td>Bridge</td><td>VRRM >= 600V, IF >= 2A</td><td>KBP206, KBP307, GBU406</td></tr>
+<tr><td>Output Diode</td><td>VRRM >= 100V, IF >= 5A, Fast</td><td>MUR460, UF5408, SR5100</td></tr>
+<tr><td>PWM IC</td><td>Match exact part number</td><td>UC3842/3/4/5 (check datasheet)</td></tr>
+<tr><td>TL431</td><td>Any TL431 variant</td><td>TL431A, TL431CLP, KA431</td></tr>
+<tr><td>Optocoupler</td><td>CTR match, isolation voltage</td><td>PC817, LTV817, TLP521</td></tr>
+</table>
+<h4>Step 6: Re-test PCB (Power OFF)</h4>
+<p>Before applying power:</p>
+<ul>
+<li>Verify all solder joints are clean and shiny</li>
+<li>Check for solder bridges between adjacent pins</li>
+<li>Verify component polarity (diodes, electrolytics, ICs)</li>
+<li>Recheck for shorts with multimeter</li>
+<li>Verify fuse is installed</li>
+</ul>
+<h4>Step 7: Power ON with Series Bulb Tester</h4>
+<div class="warning-box">
+<div class="title">⚠️ MANDATORY SAFETY TEST</div>
+<p>Connect a <strong>60W-100W incandescent bulb in series</strong> with the mains input.</p>
+<ul>
+<li><span class="value">Bulb OFF or dim</span> = Normal current draw, proceed</li>
+<li><span class="fault">Bulb FULL BRIGHT</span> = Short circuit still present, DISCONNECT IMMEDIATELY</li>
+</ul>
+</div>
+<h4>Step 8: Measure Output Voltage</h4>
+<p>With series bulb still in place:</p>
+<ul>
+<li>Measure DC output with multimeter</li>
+<li>Should read rated voltage (e.g., 66.8V) +/-5%</li>
+<li>Check for excessive ripple with scope if available</li>
+</ul>
+<h4>Step 9: Full Load Testing</h4>
+<p>Remove series bulb, connect to load:</p>
+<ul>
+<li>Use power resistor or dummy load matching battery impedance</li>
+<li>Monitor output voltage under load</li>
+<li>Check for overheating after 30 minutes</li>
+<li>Verify auto-cutoff if applicable</li>
+</ul>
+<div class="success-box">
+<strong>Repair Complete!</strong> Document what was replaced for future reference.
+</div>
+</section>
+
+<section class="content-section" id="safety">
+<h2>🛡️ Safety Guidelines</h2>
+<div class="warning-box">
+<div class="title">⚠️ DANGER: HIGH VOLTAGE PRESENT</div>
+<p>The primary side of this charger contains <strong>lethal voltages</strong>:</p>
+<ul>
+<li>AC Input: <span class="fault">220-240V AC</span> (can kill)</li>
+<li>Rectified DC: <span class="fault">310-325V DC</span> (can kill)</li>
+<li>Capacitor stored energy: <span class="fault">Dangerous even when unplugged</span></li>
+</ul>
+</div>
+<h3>Essential Safety Rules</h3>
+<div class="component-card">
+<h4>1. Always Discharge Capacitors</h4>
+<p>Large electrolytic capacitors can store lethal charge for minutes or hours after unplugging.</p>
+<p><strong>Method:</strong> Connect a 10k Ohm 5W resistor across capacitor terminals for 10 seconds. Verify 0V with multimeter before touching.</p>
+</div>
+<div class="component-card">
+<h4>2. Use Series Bulb Tester</h4>
+<p>After repair, ALWAYS power up first time with an incandescent bulb in series with mains.</p>
+<p><strong>Why:</strong> Limits current to ~0.5A if short exists, preventing further damage and fire risk.</p>
+</div>
+<div class="component-card">
+<h4>3. Use Isolation Transformer</h4>
+<p>An isolation transformer separates the device under test from earth-referenced mains.</p>
+<p><strong>Benefit:</strong> Prevents ground loop shocks. Touching one point won't complete circuit to ground.</p>
+</div>
+<div class="component-card">
+<h4>4. One Hand Rule</h4>
+<p>When probing live circuits, keep one hand in your pocket or behind your back.</p>
+<p><strong>Why:</strong> Prevents current from flowing across your chest (heart path) if you touch live and ground simultaneously.</p>
+</div>
+<div class="component-card">
+<h4>5. Wear Protection</h4>
+<ul>
+<li><strong>Safety glasses:</strong> Capacitors can explode violently</li>
+<li><strong>Insulated gloves:</strong> For handling charged components</li>
+<li><strong>Non-conductive shoes:</strong> Reduce ground path risk</li>
+<li><strong>Long sleeves:</strong> Protect from solder splashes and arcs</li>
+</ul>
+</div>
+<div class="component-card">
+<h4>6. Work Environment</h4>
+<ul>
+<li>Work on insulated mat or wooden table</li>
+<li>Keep workspace dry - no drinks nearby</li>
+<li>Ensure good lighting</li>
+<li>Have fire extinguisher (Class C) accessible</li>
+<li>Do not work alone - have someone nearby</li>
+</ul>
+</div>
+<div class="component-card">
+<h4>7. Know When to Stop</h4>
+<p>DO NOT proceed if:</p>
+<ul>
+<li>You smell burning or see smoke</li>
+<li>You hear arcing or sizzling sounds</li>
+<li>Components are getting too hot to touch</li>
+<li>You feel tingling or shock sensation</li>
+<li>You are unsure about a procedure</li>
+</ul>
+<p><strong>When in doubt, seek professional help.</strong> Your life is worth more than the charger.</p>
+</div>
+<h3>Emergency Procedures</h3>
+<table>
+<tr><th>Emergency</th><th>Action</th></tr>
+<tr><td>Electric Shock</td><td>Disconnect power FIRST (do not touch victim while live). Call emergency services. Begin CPR if needed.</td></tr>
+<tr><td>Fire</td><td>Disconnect power. Use Class C fire extinguisher (CO2). NEVER use water on electrical fires.</td></tr>
+<tr><td>Capacitor Explosion</td><td>Evacuate area. Check for injuries from flying debris. Ventilate room (toxic smoke).</td></tr>
+<tr><td>Chemical Leak</td><td>Capacitor electrolyte is corrosive. Wash with water. Seek medical attention for eye/skin contact.</td></tr>
+</table>
+</section>
+</main>
+</div>
+<script>
+function showSection(id,el){
+document.querySelectorAll('.content-section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+el.classList.add('active');
+document.getElementById('sidebar').classList.remove('open');
+document.getElementById('overlay').classList.remove('show');
+document.getElementById('mainContent').scrollTop=0;
+window.scrollTo(0,0);
+}
+function toggleSidebar(){
+document.getElementById('sidebar').classList.toggle('open');
+document.getElementById('overlay').classList.toggle('show');
+}
+function searchContent(){
+var q=document.getElementById('searchInput').value.toLowerCase();
+var secs=document.querySelectorAll('.content-section');
+var navs=document.querySelectorAll('.nav-item');
+if(q.length<2){navs.forEach(n=>n.style.display='block');return;}
+secs.forEach((s,i)=>{
+var t=s.innerText.toLowerCase();
+navs[i].style.display=t.includes(q)?'block':'none';
+});
+}
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt',(e)=>{
+e.preventDefault();
+deferredPrompt=e;
+document.getElementById('installBtn').style.display='block';
+});
+document.getElementById('installBtn').addEventListener('click',async()=>{
+if(deferredPrompt){
+deferredPrompt.prompt();
+const{outcome}=await deferredPrompt.userChoice;
+if(outcome==='accepted')document.getElementById('installBtn').style.display='none';
+deferredPrompt=null;
+}
+});
+if('serviceWorker'in navigator){
+navigator.serviceWorker.register('sw.js')
+.then(r=>console.log('SW registered'))
+.catch(e=>console.log('SW failed',e));
+}
+</script>
+</body>
+</html>
