@@ -1,0 +1,56 @@
+================================================================================
+              EV CHARGER REPAIR PRO - DEPLOYMENT GUIDE
+================================================================================
+
+GITHUB PAGES DEPLOYMENT (FREE HOSTING)
+--------------------------------------
+
+Step 1: Create GitHub Repository
+  1. Go to https://github.com/new
+  2. Repository name: ev-charger-repair-guide
+  3. Set to Public (for free GitHub Pages)
+  4. Click "Create repository"
+
+Step 2: Upload Files
+  Option A - Web Upload:
+    1. Click "uploading an existing file"
+    2. Drag and drop all files (index.html, manifest.json, sw.js, etc.)
+    3. Commit changes
+
+  Option B - Git CLI:
+    git init
+    git add .
+    git commit -m "Initial commit"
+    git branch -M main
+    git remote add origin https://github.com/YOUR_USERNAME/ev-charger-repair-guide.git
+    git push -u origin main
+
+Step 3: Enable GitHub Pages
+  1. Go to repository Settings
+  2. Scroll to "Pages" section (left sidebar)
+  3. Source: Deploy from a branch
+  4. Branch: main / root
+  5. Click Save
+  6. Wait 2-5 minutes for deployment
+
+Step 4: Access Your App
+  URL: https://YOUR_USERNAME.github.io/ev-charger-repair-guide/
+
+Step 5: Install as PWA (Mobile/Desktop)
+  - Android Chrome: Menu -> "Add to Home screen"
+  - iOS Safari: Share -> "Add to Home Screen"
+  - Desktop Chrome: Address bar -> Install icon
+
+================================================================================
+FILES INCLUDED
+================================================================================
+
+  index.html        - Main PWA app with full repair guide content
+  manifest.json     - PWA manifest for installability
+  sw.js            - Service worker for offline caching
+  offline.html     - Offline fallback page
+  DEPLOY-GUIDE.txt - This file
+  README.md        - Project documentation
+  icons/           - App icons (72, 96, 128, 192, 512 px)
+
+================================================================================
